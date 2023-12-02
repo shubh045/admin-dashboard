@@ -1,0 +1,123 @@
+main {
+  width: 90%;
+  margin: 10px auto;
+}
+
+.search-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-section input {
+  width: 30%;
+  padding: 8px 11px;
+  border-radius: 5px;
+  border: 2px solid #ebeff4;
+  outline: none;
+  color: #929cad;
+}
+
+.search-section .delete-bulk {
+  padding: 10px 8px 8px;
+  text-align: center;
+  color: #fcf6f6;
+  background-color: #f7a3a9;
+  border: 1px solid #f6a8ae;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.table-section {
+  margin-top: 10px;
+}
+
+.table-section table {
+  width: 100%;
+  /* border: 2px solid #ebeff4; */
+  border-radius: 5px;
+  border-collapse: collapse;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px #ebeff4;
+}
+
+.table-section table tbody tr,
+.table-section table thead tr {
+  border-bottom: 2px solid #ebeff4;
+}
+
+.table-section table tbody tr td,
+.table-section table thead tr th {
+  padding: 12px 0;
+}
+
+.table-section table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table-section table tr th:first-child,
+.table-section table tr td:first-child {
+  padding-left: 10px;
+}
+
+.table-section table thead tr th {
+  text-align: start;
+  color: #929cad;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-nav > p {
+  color: #929cad;
+}
+
+/* users.jsx's style */
+
+.edit,
+.delete {
+  padding: 7px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ebeff4;
+  border-radius: 5px;
+}
+
+.delete {
+  margin-left: 5px;
+  color: #f7a3a9;
+}
+
+/* Pagination.jsx's style */
+
+nav ul {
+  display: flex;
+  gap: 5px;
+  list-style-type: none;
+  align-items: center;
+}
+
+nav ul li:first-child {
+  margin-right: 15px;
+}
+
+nav ul li button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  background-color: #fff;
+  border: 1px solid #ebeff4;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.active button {
+  background-color: #ebeff4;
+}
