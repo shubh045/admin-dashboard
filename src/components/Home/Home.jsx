@@ -11,20 +11,27 @@ import "./Home.css";
 import Pagination from "../Pagination/Pagination";
 
 const Home = () => {
+  // loading management
   const [loading, setLoading] = useState(true);
+
+  // handle search states
   const [search, setSearch] = useState(false);
   const [searchUsers, setSearchUsers] = useState([]);
+
+  // pagination and store user data states
   const [countSelected, setCountSelected] = useState(0);
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
 
+  // fetch user from given api
   const fetchUsers = async () => {
     const data = await getUsers();
     setUsers(data);
     setLoading(false);
   };
 
+  // handle search function
   const handleSearch = (e) => {
     if (e.key === "Enter") {
       const usersFound = users.filter(
@@ -44,13 +51,17 @@ const Home = () => {
     }
   };
 
+  // function to handle checkboxes
   const handleChange = (e) => {
     const { name, checked } = e.target;
     if (name === "allselect") {
-      if (!search) {
+      // if searching is not performed
+        if (!search) {
         const tempUser = users.map((user) => ({ ...user, isChecked: checked }));
         setUsers(tempUser);
       }
+
+      // if showing search results
       if (search) {
         const tempUser = searchUsers.map((user) => ({
           ...user,
@@ -75,10 +86,12 @@ const Home = () => {
     }
   };
 
+  // fetch data once
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // count number of items selected
   useEffect(() => {
     setCountSelected(0);
     if (!search) {
@@ -99,6 +112,7 @@ const Home = () => {
     }
   }, [search, users, searchUsers]);
 
+  // pagination variables
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = users.slice(indexOfFirstRecord, indexOfLastRecord);
