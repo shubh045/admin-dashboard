@@ -14,6 +14,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(false);
   const [searchUsers, setSearchUsers] = useState([]);
+  const [countSelected, setCountSelected] = useState(0);
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
@@ -43,9 +44,60 @@ const Home = () => {
     }
   };
 
+  const handleChange = (e) => {
+    const { name, checked } = e.target;
+    if (name === "allselect") {
+      if (!search) {
+        const tempUser = users.map((user) => ({ ...user, isChecked: checked }));
+        setUsers(tempUser);
+      }
+      if (search) {
+        const tempUser = searchUsers.map((user) => ({
+          ...user,
+          isChecked: checked,
+        }));
+        setSearchUsers(tempUser);
+      }
+    } else {
+      if (!search) {
+        const tempUser = users.map((user) =>
+          user.id.toString() === name ? { ...user, isChecked: checked } : user
+        );
+        setUsers(tempUser);
+      }
+
+      if (search) {
+        const tempUser = searchUsers.map((user) =>
+          user.id.toString() === name ? { ...user, isChecked: checked } : user
+        );
+        setSearchUsers(tempUser);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    setCountSelected(0);
+    if (!search) {
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].isChecked) {
+          setCountSelected((prevCount) => prevCount + 1);
+        }
+      }
+    }
+
+    if (search) {
+      setCountSelected(0);
+      for (let i = 0; i < searchUsers.length; i++) {
+        if (searchUsers[i].isChecked) {
+          setCountSelected((prevCount) => prevCount + 1);
+        }
+      }
+    }
+  }, [search, users, searchUsers]);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -56,8 +108,6 @@ const Home = () => {
     indexOfLastRecord
   );
   const nSearchPages = Math.ceil(searchUsers.length / recordsPerPage);
-
-  console.log(currentSearchRecords);
 
   return (
     <main>
@@ -73,7 +123,16 @@ const Home = () => {
           <thead>
             <tr>
               <th colSpan="1">
-                <input type="checkbox" id="" />
+                <input
+                  type="checkbox"
+                  name="allselect"
+                  checked={
+                    !search
+                      ? !users.some((user) => user.isChecked !== true)
+                      : !searchUsers.some((user) => user?.isChecked !== true)
+                  }
+                  onChange={handleChange}
+                />
               </th>
               <th>Name</th>
               <th>Email</th>
@@ -85,21 +144,11 @@ const Home = () => {
           <tbody>
             {!search &&
               currentRecords.map((user) => (
-                <Users
-                  name={user.name}
-                  email={user.email}
-                  role={user.role}
-                  key={user.id}
-                />
+                <Users user={user} key={user.id} handleChange={handleChange} />
               ))}
             {search &&
               currentSearchRecords.map((user) => (
-                <Users
-                  name={user.name}
-                  email={user.email}
-                  role={user.role}
-                  key={user.id}
-                />
+                <Users user={user} key={user.id} handleChange={handleChange} />
               ))}
           </tbody>
         </table>
@@ -107,7 +156,10 @@ const Home = () => {
       {!loading && (
         <footer>
           <div className="footer-nav">
-            <p>0 of 46 row(s) selected.</p>
+            <p>
+              {countSelected} of {!search ? users.length : searchUsers.length}{" "}
+              row(s) selected.
+            </p>
             <Pagination
               nPages={nPages}
               nSearchPages={nSearchPages}

@@ -2,15 +2,17 @@
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 
-const Users = ({ name, email, role }) => {
+const Users = ({ user, handleChange }) => {
+
+  
   return (
     <tr>
       <td>
-        <input type="checkbox" id="" />
+        <input type="checkbox" name={user.id} checked={user?.isChecked || false} onChange={handleChange} />
       </td>
-      <td>{name}</td>
-      <td>{email}</td>
-      <td>{role}</td>
+      <td>{user.name}</td>
+      <td>{user.email}</td>
+      <td>{user.role}</td>
       <td>
         <button className="edit">
           <FaRegEdit />
