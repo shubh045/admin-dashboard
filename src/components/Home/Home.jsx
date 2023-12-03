@@ -24,16 +24,19 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
 
+  const [isEmpty, setIsEmpty] = useState(true);
+
   const getUsers = async () => {
     try {
       const response = await fetch(
         "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
       );
       const data = await response.json();
-      if (users.length===0) {
+      if (users.length===0 && !isEmpty) {
         setUsers(data);
         setLoading(false);
       }
+      setIsEmpty(false);
     } catch (err) {
       console.log(err);
     }
