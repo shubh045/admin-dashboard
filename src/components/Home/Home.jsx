@@ -86,15 +86,33 @@ const Home = () => {
     }
   };
 
+  const removeMultipleUsers = () => {
+    if (!search) {
+      const updatedUsers = users.filter((user) => !user.isChecked);
+      setUsers(updatedUsers);
+    }
+
+    if(search){
+        const usersToRemove = searchUsers.filter(user => user.isChecked);
+        const updatedUsers = searchUsers.filter(user => !user.isChecked);
+
+        setSearchUsers(updatedUsers);
+        const allUpdatedUsers = users.filter(user => (usersToRemove.filter(u => user.id===u.id)));
+        console.log(allUpdatedUsers)
+        setUsers(allUpdatedUsers);
+    }
+  };
+
   // fetch data once
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // store in local storage
   useEffect(() => {
     if (!search) {
-        localStorage.setItem("users", JSON.stringify(users));
-        localStorage.removeItem("searchusers");
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.removeItem("searchusers");
     }
 
     if (search)
@@ -126,7 +144,7 @@ const Home = () => {
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = users.slice(indexOfFirstRecord, indexOfLastRecord);
-  const nPages = Math.ceil(users.length / recordsPerPage);
+  const nPages = Math.ceil(users.length>0 ? users.length / recordsPerPage : (users.length+1)/recordsPerPage);
   const currentSearchRecords = searchUsers.slice(
     indexOfFirstRecord,
     indexOfLastRecord
@@ -182,8 +200,8 @@ const Home = () => {
                   user={user}
                   users={searchUsers}
                   setUsers={setSearchUsers}
-                  allUsers = {users}
-                  setAllUsers = {setUsers}
+                  allUsers={users}
+                  setAllUsers={setUsers}
                   key={user.id}
                   handleChange={handleChange}
                 />
@@ -207,7 +225,9 @@ const Home = () => {
             />
           </div>
           {countSelected > 0 && (
-            <button className="del-selected">Delete Selected</button>
+            <button className="del-selected" onClick={removeMultipleUsers}>
+              Delete Selected
+            </button>
           )}
         </footer>
       )}
