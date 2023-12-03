@@ -27,7 +27,8 @@ const Home = () => {
   // fetch user from given api
   const fetchUsers = async () => {
     const data = await getUsers();
-    if (!users) setUsers(data);
+    // if (!users) setUsers(data);
+    setUsers(data);
     setLoading(false);
   };
 
