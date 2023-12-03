@@ -92,14 +92,16 @@ const Home = () => {
       setUsers(updatedUsers);
     }
 
-    if(search){
-        const usersToRemove = searchUsers.filter(user => user.isChecked);
-        const updatedUsers = searchUsers.filter(user => !user.isChecked);
+    if (search) {
+      const usersToRemove = searchUsers.filter((user) => user.isChecked);
+      const updatedUsers = searchUsers.filter((user) => !user.isChecked);
 
-        setSearchUsers(updatedUsers);
-        const allUpdatedUsers = users.filter(user => (usersToRemove.filter(u => user.id===u.id)));
-        console.log(allUpdatedUsers)
-        setUsers(allUpdatedUsers);
+      setSearchUsers(updatedUsers);
+      const allUpdatedUsers = users.filter((user) =>
+        usersToRemove.filter((u) => user.id === u.id)
+      );
+      console.log(allUpdatedUsers);
+      setUsers(allUpdatedUsers);
     }
   };
 
@@ -144,12 +146,20 @@ const Home = () => {
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = users.slice(indexOfFirstRecord, indexOfLastRecord);
-  const nPages = Math.ceil(users.length>0 ? users.length / recordsPerPage : (users.length+1)/recordsPerPage);
+  const nPages = Math.ceil(
+    users.length > 0
+      ? users.length / recordsPerPage
+      : (users.length + 1) / recordsPerPage
+  );
   const currentSearchRecords = searchUsers.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const nSearchPages = Math.ceil(searchUsers.length / recordsPerPage);
+  const nSearchPages = Math.ceil(
+    searchUsers.length > 0
+      ? searchUsers.length / recordsPerPage
+      : (searchUsers.length + 1) / recordsPerPage
+  );
 
   return (
     <main>
