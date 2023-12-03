@@ -35,6 +35,7 @@ const Users = ({
   };
 
   const handleEdit = (id) => {
+  
     users.map((user) => {
       if (user.id === id) {
         setEdit(true);
@@ -49,8 +50,13 @@ const Users = ({
   };
 
   const handleUpdateUser = (id, newValue) => {
+    const updatedUser = users.find(user => user.id === id)
     if (!newValue.name || !newValue.email || !newValue.role) return;
     setUsers((prev) => prev.map((user) => (user.id === id ? newValue : user)));
+
+    if(allUsers){
+      setAllUsers(prev => prev.map(user => (user.id === updatedUser.id ? newValue : user)))
+    }
     setEdit(false);
   };
 
