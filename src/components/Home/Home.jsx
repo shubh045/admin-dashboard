@@ -24,16 +24,16 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
 
-const getUsers = async () => {
+  const getUsers = async () => {
     try {
       const response = await fetch(
         "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
       );
       const data = await response.json();
-      if(!users){
+      if (!users) {
         setUsers(data);
-        setLoading(false)
-      } 
+        setLoading(false);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +61,7 @@ const getUsers = async () => {
 
   // delete multiple users
   const removeMultipleUsers = () => {
-    if (!search) { 
+    if (!search) {
       const updatedUsers = users.filter((user) => !user.isChecked);
       setUsers(updatedUsers);
     }
@@ -96,6 +96,13 @@ const getUsers = async () => {
   // fetch data once
   useEffect(() => {
     getUsers();
+    if (!search) {
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.removeItem("searchusers");
+    }
+
+    if (search)
+      localStorage.setItem("searchusers", JSON.stringify(searchUsers));
   }, []);
 
   // store in local storage
