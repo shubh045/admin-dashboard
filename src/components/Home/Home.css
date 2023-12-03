@@ -105,6 +105,24 @@ footer .del-selected{
   color: #f7a3a9;
 }
 
+.edit-input{
+  border: 2px solid #ebeff4;
+  outline: none;
+  padding: 8px;
+  border-radius: 5px;
+  width: 60%;
+  color: #929cad;
+}
+
+.save{
+  padding: 8px 11px;
+  background-color: #fff;
+  border: 2px solid #ebeff4;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #929cad;
+}
+
 .active-row{
   background-color: #f8fafc;
 }
