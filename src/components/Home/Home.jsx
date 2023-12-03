@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 // functions and components import
-import { getUsers, getLocalItems } from "../../utils/getUsers";
+import { getLocalItems } from "../../utils/getUsers";
 import Users from "../Users/Users";
 import Pagination from "../Pagination/Pagination";
 
@@ -24,12 +24,19 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
 
-  // fetch user from given api
-  const fetchUsers = async () => {
-    const data = await getUsers();
-    // if (!users) setUsers(data);
-    setUsers(data);
-    setLoading(false);
+const getUsers = async () => {
+    try {
+      const response = await fetch(
+        "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
+      );
+      const data = await response.json();
+      if(!users){
+        setUsers(data);
+        setLoading(false)
+      } 
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // handle search function
@@ -54,7 +61,7 @@ const Home = () => {
 
   // delete multiple users
   const removeMultipleUsers = () => {
-    if (!search) {
+    if (!search) { 
       const updatedUsers = users.filter((user) => !user.isChecked);
       setUsers(updatedUsers);
     }
@@ -65,13 +72,6 @@ const Home = () => {
 
       setSearchUsers(updatedUsers);
 
-      //   for(let i=0;i<users.length;i++){
-      //     for(let j=0;j<usersToRemove.length;j++){
-      //         if(users[i].id === usersToRemove[j].id){
-      //             users[i].isChecked = !users[i].isChecked;
-      //         }
-      //     }
-      //   }
       const allUpdatedUsers = users.filter(
         (user) =>
           !JSON.parse(
@@ -95,7 +95,7 @@ const Home = () => {
 
   // fetch data once
   useEffect(() => {
-    fetchUsers();
+    getUsers();
   }, []);
 
   // store in local storage
@@ -247,7 +247,7 @@ const Home = () => {
           </tbody>
         </table>
       </section>
-      {!loading && (
+      {
         <footer>
           <div className="footer-nav">
             <p>
@@ -268,7 +268,7 @@ const Home = () => {
             </button>
           )}
         </footer>
-      )}
+      }
     </main>
   );
 };
