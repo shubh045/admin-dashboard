@@ -82,8 +82,14 @@ const Home = () => {
   };
 
   const removeAll = () => {
-    setUsers([]);
-    setSearchUsers([]);
+    if (
+      window.confirm(
+        "This action will delete all elements of table. Are you sure to delete?"
+      ) === true
+    ) {
+      setUsers([]);
+      setSearchUsers([]);
+    }
   };
 
   // fetch data once
@@ -200,7 +206,9 @@ const Home = () => {
                   checked={
                     !search
                       ? !currentRecords.some((user) => user.isChecked !== true)
-                      : !currentSearchRecords.some((user) => user?.isChecked !== true)
+                      : !currentSearchRecords.some(
+                          (user) => user?.isChecked !== true
+                        )
                   }
                   onChange={handleChange}
                 />
