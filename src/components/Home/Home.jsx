@@ -2,13 +2,13 @@
 import { useState, useEffect } from "react";
 
 // functions and components import
-import { getUsers } from "../../utils/getUsers";
+import { getUsers, getLocalItems } from "../../utils/getUsers";
 import Users from "../Users/Users";
+import Pagination from "../Pagination/Pagination";
 
 // css and icons import
 import { RiDeleteBin7Line } from "react-icons/ri";
 import "./Home.css";
-import Pagination from "../Pagination/Pagination";
 
 const Home = () => {
   // loading management
@@ -16,18 +16,18 @@ const Home = () => {
 
   // handle search states
   const [search, setSearch] = useState(false);
-  const [searchUsers, setSearchUsers] = useState([]);
+  const [searchUsers, setSearchUsers] = useState(getLocalItems(search));
 
   // pagination and store user data states
   const [countSelected, setCountSelected] = useState(0);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(getLocalItems(search));
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
 
   // fetch user from given api
   const fetchUsers = async () => {
     const data = await getUsers();
-    setUsers(data);
+    if (!users) setUsers(data);
     setLoading(false);
   };
 
@@ -56,7 +56,7 @@ const Home = () => {
     const { name, checked } = e.target;
     if (name === "allselect") {
       // if searching is not performed
-        if (!search) {
+      if (!search) {
         const tempUser = users.map((user) => ({ ...user, isChecked: checked }));
         setUsers(tempUser);
       }
@@ -90,6 +90,16 @@ const Home = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (!search) {
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.removeItem("searchusers");
+    }
+
+    if (search)
+      localStorage.setItem("searchusers", JSON.stringify(searchUsers));
+  }, [users, searchUsers, search]);
 
   // count number of items selected
   useEffect(() => {
@@ -158,11 +168,25 @@ const Home = () => {
           <tbody>
             {!search &&
               currentRecords.map((user) => (
-                <Users user={user} key={user.id} handleChange={handleChange} />
+                <Users
+                  user={user}
+                  users={users}
+                  setUsers={setUsers}
+                  key={user.id}
+                  handleChange={handleChange}
+                />
               ))}
             {search &&
               currentSearchRecords.map((user) => (
-                <Users user={user} key={user.id} handleChange={handleChange} />
+                <Users
+                  user={user}
+                  users={searchUsers}
+                  setUsers={setSearchUsers}
+                  allUsers = {users}
+                  setAllUsers = {setUsers}
+                  key={user.id}
+                  handleChange={handleChange}
+                />
               ))}
           </tbody>
         </table>
@@ -182,7 +206,9 @@ const Home = () => {
               setCurrentPage={setCurrentPage}
             />
           </div>
-          {/* <button>Delete Selected</button> */}
+          {countSelected > 0 && (
+            <button className="del-selected">Delete Selected</button>
+          )}
         </footer>
       )}
     </main>

@@ -70,10 +70,20 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: -20px;
 }
 
 .footer-nav > p {
   color: #929cad;
+}
+
+footer .del-selected{
+  background-color: #e55660;
+  border: 1px solid #e55660;
+  padding: 10px;
+  border-radius: 5px;
+  color: #ebeff4;
+  cursor: pointer;
 }
 
 /* users.jsx's style */
@@ -87,6 +97,7 @@ main {
   background-color: #fff;
   border: 1px solid #ebeff4;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .delete {

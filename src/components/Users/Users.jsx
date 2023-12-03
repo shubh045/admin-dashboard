@@ -1,9 +1,18 @@
+
 // css and icons import
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 
-const Users = ({ user, handleChange }) => {
+const Users = ({ user, handleChange, users, setUsers, allUsers, setAllUsers }) => {
 
+  const deleteOne = (id) => {
+    const userToDelete = users.filter(user => user.id === id)
+    const updatedUsers = users.filter(user => user.id !== id);
+    setUsers(updatedUsers);
+
+    const allUpdatedUsers = allUsers.filter(user => user !== userToDelete[0])
+    setAllUsers(allUpdatedUsers);
+  }
   
   return (
     <tr>
@@ -17,7 +26,7 @@ const Users = ({ user, handleChange }) => {
         <button className="edit">
           <FaRegEdit />
         </button>
-        <button className="delete">
+        <button className="delete" onClick={() => deleteOne(user.id)}>
           <RiDeleteBin7Line />
         </button>
       </td>
