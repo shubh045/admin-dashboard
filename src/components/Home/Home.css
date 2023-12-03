@@ -105,6 +105,10 @@ footer .del-selected{
   color: #f7a3a9;
 }
 
+.active-row{
+  background-color: #f8fafc;
+}
+
 /* Pagination.jsx's style */
 
 nav ul {

@@ -51,41 +51,7 @@ const Home = () => {
     }
   };
 
-  // function to handle checkboxes
-  const handleChange = (e) => {
-    const { name, checked } = e.target;
-    if (name === "allselect") {
-      // if searching is not performed
-      if (!search) {
-        const tempUser = users.map((user) => ({ ...user, isChecked: checked }));
-        setUsers(tempUser);
-      }
-
-      // if showing search results
-      if (search) {
-        const tempUser = searchUsers.map((user) => ({
-          ...user,
-          isChecked: checked,
-        }));
-        setSearchUsers(tempUser);
-      }
-    } else {
-      if (!search) {
-        const tempUser = users.map((user) =>
-          user.id.toString() === name ? { ...user, isChecked: checked } : user
-        );
-        setUsers(tempUser);
-      }
-
-      if (search) {
-        const tempUser = searchUsers.map((user) =>
-          user.id.toString() === name ? { ...user, isChecked: checked } : user
-        );
-        setSearchUsers(tempUser);
-      }
-    }
-  };
-
+  // delete multiple users
   const removeMultipleUsers = () => {
     if (!search) {
       const updatedUsers = users.filter((user) => !user.isChecked);
@@ -97,12 +63,27 @@ const Home = () => {
       const updatedUsers = searchUsers.filter((user) => !user.isChecked);
 
       setSearchUsers(updatedUsers);
-      const allUpdatedUsers = users.filter((user) =>
-        usersToRemove.filter((u) => user.id === u.id)
+
+      //   for(let i=0;i<users.length;i++){
+      //     for(let j=0;j<usersToRemove.length;j++){
+      //         if(users[i].id === usersToRemove[j].id){
+      //             users[i].isChecked = !users[i].isChecked;
+      //         }
+      //     }
+      //   }
+      const allUpdatedUsers = users.filter(
+        (user) =>
+          !JSON.parse(
+            JSON.stringify(usersToRemove).includes(JSON.stringify(user.id))
+          )
       );
-      console.log(allUpdatedUsers);
       setUsers(allUpdatedUsers);
     }
+  };
+
+  const removeAll = () => {
+    setUsers([]);
+    setSearchUsers([]);
   };
 
   // fetch data once
@@ -161,11 +142,49 @@ const Home = () => {
       : (searchUsers.length + 1) / recordsPerPage
   );
 
+  // function to handle checkboxes
+  const handleChange = (e) => {
+    const { name, checked } = e.target;
+    if (name === "allselect") {
+      // if searching is not performed
+      if (!search) {
+        const tempUser = users.map((user) =>
+          currentRecords.includes(user) ? { ...user, isChecked: checked } : user
+        );
+        setUsers(tempUser);
+      }
+
+      // if showing search results
+      if (search) {
+        const tempUser = searchUsers.map((user) =>
+          currentSearchRecords.includes(user)
+            ? { ...user, isChecked: checked }
+            : user
+        );
+        setSearchUsers(tempUser);
+      }
+    } else {
+      if (!search) {
+        const tempUser = users.map((user) =>
+          user.id.toString() === name ? { ...user, isChecked: checked } : user
+        );
+        setUsers(tempUser);
+      }
+
+      if (search) {
+        const tempUser = searchUsers.map((user) =>
+          user.id.toString() === name ? { ...user, isChecked: checked } : user
+        );
+        setSearchUsers(tempUser);
+      }
+    }
+  };
+
   return (
     <main>
       <section className="search-section">
         <input type="text" placeholder="Search..." onKeyDown={handleSearch} />
-        <button className="delete-bulk">
+        <button className="delete-bulk" onClick={removeAll}>
           <RiDeleteBin7Line />
         </button>
       </section>
@@ -180,8 +199,8 @@ const Home = () => {
                   name="allselect"
                   checked={
                     !search
-                      ? !users.some((user) => user.isChecked !== true)
-                      : !searchUsers.some((user) => user?.isChecked !== true)
+                      ? !currentRecords.some((user) => user.isChecked !== true)
+                      : !currentSearchRecords.some((user) => user?.isChecked !== true)
                   }
                   onChange={handleChange}
                 />

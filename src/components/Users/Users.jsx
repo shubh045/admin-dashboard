@@ -10,12 +10,14 @@ const Users = ({ user, handleChange, users, setUsers, allUsers, setAllUsers }) =
     const updatedUsers = users.filter(user => user.id !== id);
     setUsers(updatedUsers);
 
-    const allUpdatedUsers = allUsers.filter(user => user !== userToDelete[0])
-    setAllUsers(allUpdatedUsers);
+    if(allUsers){
+      const allUpdatedUsers = allUsers.filter(user => user !== userToDelete[0])
+      setAllUsers(allUpdatedUsers);
+    }
   }
   
   return (
-    <tr>
+    <tr className={user.isChecked ? 'active-row': ''}>
       <td>
         <input type="checkbox" name={user.id} checked={user?.isChecked || false} onChange={handleChange} />
       </td>
